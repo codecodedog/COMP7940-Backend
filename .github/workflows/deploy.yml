@@ -38,8 +38,8 @@ jobs:
           port: 22
           script: |
             docker pull hinorpio/comp7940_api:latest
-            docker stop comp7940_api || true
-            docker rm comp7940_api || true
+            docker stop api-server || true
+            docker rm api-server || true
             docker run -d --name api-server -p 80:5000 hinorpio/comp7940_api:latest
 
       - name: Deploy to AWS Lightsail Instance 2
@@ -50,6 +50,6 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
             docker pull hinorpio/comp7940_api:latest
-            docker stop comp7940_api || true
-            docker rm comp7940_api || true
+            docker stop api-server || true
+            docker rm api-server || true
             docker run -d --name api-server -p 80:5000 hinorpio/comp7940_api:latest
