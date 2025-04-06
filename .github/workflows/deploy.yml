@@ -40,7 +40,7 @@ jobs:
             docker pull hinorpio/comp7940_api:latest
             docker stop api-server || true
             docker rm api-server || true
-            docker run -d --name api-server -p 80:5000 \
+            docker run -d -p 80:5000 --name api-server \
                -e DB_ENDPOINT=${{ secrets.DB_ENDPOINT }} \
                -e DB_NAME=${{ secrets.DB_NAME }} \
                -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
@@ -57,7 +57,7 @@ jobs:
             docker pull hinorpio/comp7940_api:latest
             docker stop api-server || true
             docker rm api-server || true
-            docker run -d --name api-server -p 80:5000 \
+            docker run -d -p 80:5000 --name api-server \
                -e DB_ENDPOINT=${{ secrets.DB_ENDPOINT }} \
                -e DB_NAME=${{ secrets.DB_NAME }} \
                -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
