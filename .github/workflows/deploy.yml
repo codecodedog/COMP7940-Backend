@@ -1,0 +1,47 @@
+name: Deploy to AWS Lightsail
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker build -t comp7940_api:latest .
+
+      - name: Save Docker image as tar archive
+        run: docker save -o comp7940_api.tar comp7940_api:latest
+
+      - name: Deploy to AWS Lightsail Instance 1
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_INSTANCE_1_IP }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            docker load -i comp7940_api.tar
+            docker stop my-app || true
+            docker rm my-app || true
+            docker run -d --name my-app -p 80:80 comp7940_api:latest
+
+      - name: Deploy to AWS Lightsail Instance 2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_INSTANCE_2_IP }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            docker load -i comp7940_api.tar
+            docker stop my-app || true
+            docker rm my-app || true
+            docker run -d --name my-app -p 80:80 comp7940_api:latest
