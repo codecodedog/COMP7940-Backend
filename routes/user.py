@@ -61,6 +61,34 @@ def insert_user():
         if connection is not None:
             connection.close()
 
+@user_bp.route('/user/question', methods=['POST'])
+def insert_user_question():
+    data = request.get_json()
+
+    telegram_id = data['telegram_id']
+    question_count = data['question_count']
+    question_history = data['question_history']
+
+    connection = get_connection()
+    if connection is None:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            "INSERT INTO user (telegram_id, question_count, question_history) VALUES (%s, %s, %s)",
+            (telegram_id, question_count, question_history)
+        )
+        connection.commit()
+        cursor.close()
+        return jsonify({'result': data}), 200
+    except Exception as e:
+        connection.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if connection is not None:
+            connection.close()
+
 @user_bp.route('/user', methods=['PUT'])
 def update_user():
     data = request.get_json()
@@ -80,7 +108,35 @@ def update_user():
         cursor.execute(
             "UPDATE user SET username = %s, `condition` = %s, preferred_district = %s, isActive = %s "
             "WHERE telegram_id = %s",
-            (username, condition, preferred_district, 1, telegram_id)
+            (username, condition, preferred_district, isActive, telegram_id)
+        )
+        connection.commit()
+        cursor.close()
+        return jsonify({'result': data}), 200
+    except Exception as e:
+        connection.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if connection is not None:
+            connection.close()
+
+@user_bp.route('/user/question', methods=['PUT'])
+def update_user_question_count():
+    data = request.get_json()
+
+    ID = data['ID']
+    question_count = data['question_count']
+    question_history = data['question_history']
+
+    connection = get_connection()
+    if connection is None:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            "UPDATE user SET question_count = %s, question_history = %s WHERE ID = %s",
+            (question_count, question_history, ID)
         )
         connection.commit()
         cursor.close()
