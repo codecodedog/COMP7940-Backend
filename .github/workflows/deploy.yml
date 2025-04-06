@@ -30,9 +30,9 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
             docker load -i comp7940_api.tar
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -d --name my-app -p 80:80 comp7940_api:latest
+            docker stop comp7940_api || true
+            docker rm comp7940_api || true
+            docker run -p 80:80 comp7940_api:latest
 
       - name: Deploy to AWS Lightsail Instance 2
         uses: appleboy/ssh-action@master
@@ -42,6 +42,6 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
             docker load -i comp7940_api.tar
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -d --name my-app -p 80:80 comp7940_api:latest
+            docker stop comp7940_api || true
+            docker rm comp7940_api || true
+            docker run -p 80:80 comp7940_api:latest
