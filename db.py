@@ -11,6 +11,8 @@ database = os.getenv('DB_NAME')
 username = os.getenv('DB_USERNAME')
 password = os.getenv('DB_PASSWORD')
 
+print(host, port, database, username, password)
+
 def get_connection():
     # Establish connection
     conn = mysql.connector.connect(
