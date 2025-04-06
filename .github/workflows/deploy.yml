@@ -40,7 +40,12 @@ jobs:
             docker pull hinorpio/comp7940_api:latest
             docker stop api-server || true
             docker rm api-server || true
-            docker run -d --name api-server -p 80:5000 hinorpio/comp7940_api:latest
+            docker run -d --name api-server -p 80:5000 \
+               -e DB_ENDPOINT=${{ secrets.DB_ENDPOINT }} \
+               -e DB_NAME=${{ secrets.DB_NAME }} \
+               -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+               hinorpio/comp7940_api:latest
 
       - name: Deploy to AWS Lightsail Instance 2
         uses: appleboy/ssh-action@master
@@ -52,4 +57,9 @@ jobs:
             docker pull hinorpio/comp7940_api:latest
             docker stop api-server || true
             docker rm api-server || true
-            docker run -d --name api-server -p 80:5000 hinorpio/comp7940_api:latest
+            docker run -d --name api-server -p 80:5000 \
+               -e DB_ENDPOINT=${{ secrets.DB_ENDPOINT }} \
+               -e DB_NAME=${{ secrets.DB_NAME }} \
+               -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+               hinorpio/comp7940_api:latest
