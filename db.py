@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Connection details
-host = os.getenv('DB_ENDPOINT')
+host = 'ls-d034ea5372313ffb138a7e4b821254e7da015cb0.canjvfiul751.ap-southeast-1.rds.amazonaws.com'
 port = 3306
-database = os.getenv('DB_NAME')
-username = os.getenv('DB_USERNAME')
-password = os.getenv('DB_PASSWORD')
+database = 'comp7940'
+username = 'dbmasteruser'
+password = 'xyAV$s`9k>93+C)iPwxt1G~NQzN=YEqs'
 
 def get_connection():
     # Establish connection
